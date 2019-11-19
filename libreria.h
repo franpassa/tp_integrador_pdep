@@ -1,36 +1,36 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "libreria.c"
 
-typedef struct{
-	char* nombre;
-	int energia;
-	float procesamiento;
-	char* recuerdo;
-}anfitrion;
-
-typedef struct{
-	anfitrion anfitrion;
-	struct Nodo_Anfitrion* siguiente;
-}nodo_anfitrion;
-
-typedef struct{
-	int energia;
-	int minutosRestantes;
-	nodo_anfitrion* listaAnfitriones;
-}huesped;
-
-nodo_anfitrion* agregarAnfitrionALista(anfitrion* Anfitrion, nodo_anfitrion* Lista);
-void mostrarListaAnfitriones(nodo_anfitrion* Lista);
-anfitrion* inicializarAnfitrion(char* nombre,int energia,float procesamiento,char* recuerdo);
-
-anfitrion* inicializarAnfitrion(char* nombre,int energia,float procesamiento,char* recuerdo){
+anfitrion* inicializarAnfitrion(char* nombre,int energia,float procesamiento,nodo_recuerdo* Recuerdos){
 	anfitrion* nuevoAnfitrion = malloc(sizeof(anfitrion));
 	nuevoAnfitrion->nombre = strdup(nombre);
 	nuevoAnfitrion->energia = energia;
 	nuevoAnfitrion->procesamiento = procesamiento;
-	nuevoAnfitrion->recuerdo = strdup(recuerdo);
+	nuevoAnfitrion->recuerdos = Recuerdos;
 	return nuevoAnfitrion;
+}
+
+recuerdo* inicializarRecuerdo(char* descripcion, escenario Escenario){
+    recuerdo* nuevoRecuerdo = malloc(sizeof(recuerdo));
+    nuevoRecuerdo->descripcion = strdup(descripcion);
+    nuevoRecuerdo->Escenario = Escenario;
+    return nuevoRecuerdo;
+}
+
+escenario inicializarEscenario(char* nombre,char* categoria){
+    escenario nuevoEscenario;
+    nuevoEscenario.nombre = nombre;
+    nuevoEscenario.categoria = categoria;
+    return nuevoEscenario;
+}
+
+nodo_recuerdo* agregarRecuerdoALista(recuerdo* Recuerdo,nodo_recuerdo* Lista){
+    nodo_recuerdo* nuevoNodo = (nodo_recuerdo*)malloc(sizeof(nodo_recuerdo));
+    nuevoNodo->Recuerdo = *Recuerdo;
+    nuevoNodo->siguiente = Lista;
+    return nuevoNodo;
 }
 
 nodo_anfitrion* agregarAnfitrionALista(anfitrion* Anfitrion, nodo_anfitrion* Lista)
@@ -41,13 +41,21 @@ nodo_anfitrion* agregarAnfitrionALista(anfitrion* Anfitrion, nodo_anfitrion* Lis
     return nuevoNodo;
 }
 
-void mostrarListaAnfitriones(nodo_anfitrion* Lista){
+void mostrarRecuerdos(nodo_recuerdo* Lista){
+    while(Lista!=NULL){
+        printf("\tRecuerdo: %s\n",Lista->Recuerdo.descripcion);
+        printf("\tNombre del escenario: %s\n",Lista->Recuerdo.Escenario.nombre);
+        printf("\tCategoria del escenario: %s\n",Lista->Recuerdo.Escenario.categoria);
+        Lista = Lista->siguiente;
+    }
+}
 
+void mostrarListaAnfitriones(nodo_anfitrion* Lista){
 	while(Lista!=NULL){
 		printf("Nombre: %s\n",Lista->anfitrion.nombre);
 		printf("Energia: %d\n",Lista->anfitrion.energia);
 		printf("Procesamiento: %f\n",Lista->anfitrion.procesamiento);
-		printf("Recuerdo: %s\n\n",Lista->anfitrion.recuerdo);
+		mostrarRecuerdos(Lista->anfitrion.recuerdos);
 		Lista = Lista->siguiente;
 	}
 }
