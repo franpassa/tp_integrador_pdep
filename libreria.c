@@ -30,6 +30,19 @@ bajoCoste* inicializarTipoBajoCoste(char* zona){
 	return nuevoTipo;
 }
 
+estandar* inicializarTipoEstandar(){
+	estandar* nuevoTipo = malloc(sizeof(estandar));
+	nuevoTipo->nombre = "estandar";
+	return nuevoTipo;
+}
+
+deLujo* inicializarTipoDeLujo(int visitas){
+	deLujo* nuevoTipo = malloc(sizeof(deLujo));
+	nuevoTipo->nombre = "deLujo";
+	nuevoTipo->visitas = visitas;
+	return nuevoTipo;
+}
+
 nodo_recuerdo* agregarRecuerdoALista(recuerdo* Recuerdo,nodo_recuerdo* Lista){
     nodo_recuerdo* nuevoNodo = (nodo_recuerdo*)malloc(sizeof(nodo_recuerdo));
     nuevoNodo->Recuerdo = *Recuerdo;
@@ -62,6 +75,19 @@ void mostrarListaAnfitriones(nodo_anfitrion* Lista){
 	}
 }
 
+void mostrarEscenario(escenario* Escenario){
+	printf("El nombre del escenario es: %s\n",Escenario->nombre);
+	if(strcmp(((bajoCoste*)Escenario->categoria)->nombre,"bajoCoste")==0){
+		printf("La categoria del escenario es: %s\n",((bajoCoste*)Escenario->categoria)->nombre);
+	}
+	else if(strcmp(((estandar*)Escenario->categoria)->nombre,"bajoCoste")==0){
+		printf("La categoria del escenario es: %s\n",((estandar*)Escenario->categoria)->nombre);
+	}
+	else{
+		printf("La categoria del escenario es: %s\n",((deLujo*)Escenario->categoria)->nombre);
+	}
+}
+
 float felicidadDeAnfitrion(anfitrion* Anfitrion){
 	return (Anfitrion->energia/Anfitrion->procesamiento);
 }
@@ -79,5 +105,32 @@ int nivelDeFama(escenario* Escenario){
 	}
 	else{
 		return 110;
+	}
+}
+
+int emotividad(recuerdo* Recuerdo){
+	int largo = strlen(Recuerdo->descripcion);
+	int fama = nivelDeFama(Recuerdo->Escenario);
+	return largo*fama;
+}
+
+escenario* evolucionarEscenario(escenario* Escenario){
+	if(strcmp(((bajoCoste*)Escenario->categoria)->nombre,"bajoCoste")==0){
+		//Aca se me complica, porque no puedo asignarle a la categoria un tipo hipotetico, tiene que existir.
+		estandar* estandar = malloc(sizeof(estandar));
+		estandar->nombre = "estandar";
+		Escenario->categoria = estandar;
+		return Escenario;
+	}
+	else if(strcmp(((estandar*)Escenario->categoria)->nombre,"estandar")==0){
+		deLujo* deLujo = malloc(sizeof(deLujo));
+		deLujo->nombre = "deLujo";
+		deLujo->visitas = 1;
+		Escenario->categoria = deLujo;
+		return Escenario;
+	}
+	else{
+		printf("\tError: no se puede evolucionar\n");
+		return Escenario;
 	}
 }

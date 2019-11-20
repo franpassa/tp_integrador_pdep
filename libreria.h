@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*Tipos de escenario*/
+/*Estructuras*/
+//Tipos de escenario
 
 typedef struct bajoCoste{
 	char* nombre;
@@ -55,6 +56,8 @@ typedef struct nodo_anfitrion{
 //Funciones para inicializar las estructuras
 
 bajoCoste* inicializarTipoBajoCoste(char* zona);
+estandar* inicializarTipoEstandar();
+deLujo* inicializarTipoDeLujo(int visitas);
 anfitrion* inicializarAnfitrion(char* nombre,int energia,float procesamiento,nodo_recuerdo* Recuerdos);
 recuerdo* inicializarRecuerdo(char* descripcion, escenario* Escenario);
 escenario* inicializarEscenario(char* nombre, void* categoria);
@@ -67,6 +70,7 @@ nodo_recuerdo* agregarRecuerdoALista(recuerdo* Recuerdo, nodo_recuerdo* Lista);
 //Funciones para mostrar
 
 void mostrarListaAnfitriones(nodo_anfitrion* Lista);
+void mostrarEscenario(escenario* Escenario);
 
 //Funciones relacionadas al enunciado del parcial
 
@@ -74,4 +78,7 @@ float felicidadDeAnfitrion(anfitrion* Anfitrion);
 float rebeldiaDeAnfitrion(anfitrion* Anfitrion);
 
 int nivelDeFama(escenario* Escenario);
+int emotividad(recuerdo* Recuerdo);
+
+escenario* evolucionarEscenario(escenario* Escenario);
 
