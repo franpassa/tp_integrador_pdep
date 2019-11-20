@@ -65,7 +65,7 @@ void mostrarRecuerdos(nodo_recuerdo* Lista){
     }
 }
 
-void mostrarListaAnfitriones(nodo_anfitrion* Lista){
+void mostrarAnfitriones(nodo_anfitrion* Lista){
 	while(Lista!=NULL){
 		printf("Nombre: %s\n",Lista->anfitrion.nombre);
 		printf("Energia: %d\n",Lista->anfitrion.energia);
@@ -133,4 +133,26 @@ escenario* evolucionarEscenario(escenario* Escenario){
 		printf("\tError: no se puede evolucionar\n");
 		return Escenario;
 	}
+}
+
+char* strconcat(char *s,char *t)
+{
+    char *p=malloc(strlen(s)+strlen(t)+1);    /* 3: you will have to reserve memory to hold the copy. */
+    int ptr =0, temp = 0;                   /* 4 initialise some helpers */
+
+    while(s[temp]!='\0'){                  /* 5. use the temp to "walk" over string 1 */
+        p[ptr++] = s[temp++];
+    }
+    temp=0;
+    while(t[temp]!='\0'){                   /* and string two */
+        p[ptr++]=t[temp++];
+    }
+    return p;
+}
+
+void conocer(anfitrion* Anfitrion,escenario* Escenario){
+	recuerdo* nuevoRecuerdo = malloc(sizeof(recuerdo));
+	nuevoRecuerdo->descripcion = strconcat("Conoce el escenario ",Escenario->nombre);
+	nuevoRecuerdo->Escenario = Escenario;
+	Anfitrion->recuerdos = agregarRecuerdoALista(nuevoRecuerdo,Anfitrion->recuerdos);
 }

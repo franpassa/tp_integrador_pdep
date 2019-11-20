@@ -2,8 +2,8 @@
 
 int main() {
 	deLujo* deLujo = inicializarTipoDeLujo(10);
-	//estandar* estandar = inicializarTipoEstandar();
-	//bajoCoste* BajoCoste = inicializarTipoBajoCoste("vicente lopez");
+	estandar* estandar = inicializarTipoEstandar();
+	bajoCoste* BajoCoste = inicializarTipoBajoCoste("vicente lopez");
     escenario* cantina = inicializarEscenario("Cantina",deLujo);
     recuerdo* RecuerdoAmor = inicializarRecuerdo("Conocio al amor de su vida en la cantina",cantina);
 
@@ -12,9 +12,10 @@ int main() {
 
 	anfitrion* Dolores = inicializarAnfitrion("Dolores",90,0.7,RecuerdosDeDolores);
 
+	conocer(Dolores,cantina);
 	nodo_anfitrion* Anfitriones = NULL;
 	Anfitriones = agregarAnfitrionALista(Dolores,Anfitriones);
-	mostrarListaAnfitriones(Anfitriones);
+	mostrarAnfitriones(Anfitriones);
 
 	printf("El nivel de felicidad de Dolores es: %.2f\n",felicidadDeAnfitrion(Dolores));
 	printf("El nivel de rebeldia de Dolores es: %.4f\n",rebeldiaDeAnfitrion(Dolores));
@@ -26,6 +27,5 @@ int main() {
 	evolucionarEscenario(cantina);
 	mostrarEscenario(cantina);
 
-	system("pause");
 	return 0;
 }

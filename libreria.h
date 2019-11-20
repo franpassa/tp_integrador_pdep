@@ -55,30 +55,35 @@ typedef struct nodo_anfitrion{
 /*Funciones*/
 //Funciones para inicializar las estructuras
 
-bajoCoste* inicializarTipoBajoCoste(char* zona);
+bajoCoste* inicializarTipoBajoCoste(char*);
 estandar* inicializarTipoEstandar();
-deLujo* inicializarTipoDeLujo(int visitas);
-anfitrion* inicializarAnfitrion(char* nombre,int energia,float procesamiento,nodo_recuerdo* Recuerdos);
-recuerdo* inicializarRecuerdo(char* descripcion, escenario* Escenario);
-escenario* inicializarEscenario(char* nombre, void* categoria);
+deLujo* inicializarTipoDeLujo(int);
+anfitrion* inicializarAnfitrion(char*, int, float, nodo_recuerdo*);
+recuerdo* inicializarRecuerdo(char*, escenario*);
+escenario* inicializarEscenario(char*, void*);
 
 //Funciones para agregar elementos a las listas
 
-nodo_anfitrion* agregarAnfitrionALista(anfitrion* Anfitrion, nodo_anfitrion* Lista);
-nodo_recuerdo* agregarRecuerdoALista(recuerdo* Recuerdo, nodo_recuerdo* Lista);
+nodo_anfitrion* agregarAnfitrionALista(anfitrion*, nodo_anfitrion*);
+nodo_recuerdo* agregarRecuerdoALista(recuerdo*, nodo_recuerdo*);
 
 //Funciones para mostrar
 
-void mostrarListaAnfitriones(nodo_anfitrion* Lista);
-void mostrarEscenario(escenario* Escenario);
+void mostrarAnfitriones(nodo_anfitrion*);
+void mostrarEscenario(escenario*);
+void mostrarRecuerdos(nodo_recuerdo*);
 
 //Funciones relacionadas al enunciado del parcial
 
-float felicidadDeAnfitrion(anfitrion* Anfitrion);
-float rebeldiaDeAnfitrion(anfitrion* Anfitrion);
+float felicidadDeAnfitrion(anfitrion*);
+float rebeldiaDeAnfitrion(anfitrion*);
 
-int nivelDeFama(escenario* Escenario);
-int emotividad(recuerdo* Recuerdo);
+int nivelDeFama(escenario*);
+int emotividad(recuerdo*);
 
-escenario* evolucionarEscenario(escenario* Escenario);
+escenario* evolucionarEscenario(escenario*);
+void conocer(anfitrion*, escenario*);
 
+//Funciones de utilidad
+
+char* strconcat(char*, char*);
