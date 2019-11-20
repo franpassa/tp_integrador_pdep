@@ -9,18 +9,25 @@ anfitrion* inicializarAnfitrion(char* nombre,int energia,float procesamiento,nod
 	return nuevoAnfitrion;
 }
 
-recuerdo* inicializarRecuerdo(char* descripcion, escenario Escenario){
+recuerdo* inicializarRecuerdo(char* descripcion, escenario* Escenario){
     recuerdo* nuevoRecuerdo = malloc(sizeof(recuerdo));
     nuevoRecuerdo->descripcion = strdup(descripcion);
     nuevoRecuerdo->Escenario = Escenario;
     return nuevoRecuerdo;
 }
 
-escenario inicializarEscenario(char* nombre,char* categoria){
-    escenario nuevoEscenario;
-    nuevoEscenario.nombre = nombre;
-    nuevoEscenario.categoria = categoria;
+escenario* inicializarEscenario(char* nombre,void* categoria){
+    escenario* nuevoEscenario = malloc(sizeof(escenario));
+    nuevoEscenario->nombre = nombre;
+    nuevoEscenario->categoria = categoria;
     return nuevoEscenario;
+}
+
+bajoCoste* inicializarTipoBajoCoste(char* zona){
+	bajoCoste* nuevoTipo = malloc(sizeof(bajoCoste));
+	nuevoTipo->nombre = "bajoCoste";
+	nuevoTipo->zona = zona;
+	return nuevoTipo;
 }
 
 nodo_recuerdo* agregarRecuerdoALista(recuerdo* Recuerdo,nodo_recuerdo* Lista){
@@ -40,9 +47,7 @@ nodo_anfitrion* agregarAnfitrionALista(anfitrion* Anfitrion, nodo_anfitrion* Lis
 
 void mostrarRecuerdos(nodo_recuerdo* Lista){
     while(Lista!=NULL){
-        printf("\tRecuerdo: %s\n",Lista->Recuerdo.descripcion);
-        printf("\tNombre del escenario: %s\n",Lista->Recuerdo.Escenario.nombre);
-        printf("\tCategoria del escenario: %s\n",Lista->Recuerdo.Escenario.categoria);
+        printf("Recuerdo: %s\n",Lista->Recuerdo.descripcion);
         Lista = Lista->siguiente;
     }
 }
@@ -51,8 +56,28 @@ void mostrarListaAnfitriones(nodo_anfitrion* Lista){
 	while(Lista!=NULL){
 		printf("Nombre: %s\n",Lista->anfitrion.nombre);
 		printf("Energia: %d\n",Lista->anfitrion.energia);
-		printf("Procesamiento: %f\n",Lista->anfitrion.procesamiento);
+		printf("Procesamiento: %.2f\n",Lista->anfitrion.procesamiento);
 		mostrarRecuerdos(Lista->anfitrion.recuerdos);
 		Lista = Lista->siguiente;
+	}
+}
+
+float felicidadDeAnfitrion(anfitrion* Anfitrion){
+	return (Anfitrion->energia/Anfitrion->procesamiento);
+}
+
+float rebeldiaDeAnfitrion(anfitrion* Anfitrion){
+	return 1/felicidadDeAnfitrion(Anfitrion);
+}
+
+int nivelDeFama(escenario* Escenario){
+	if (strcmp(((bajoCoste*)Escenario->categoria)->nombre,"bajoCoste")==0){
+		return 100+strlen(((bajoCoste*)Escenario->categoria)->zona);
+	}
+	else if (strcmp(((deLujo*)Escenario->categoria)->nombre,"deLujo")==0){
+		return 100+((deLujo*)Escenario->categoria)->visitas;
+	}
+	else{
+		return 110;
 	}
 }
