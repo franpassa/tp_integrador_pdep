@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 /*Estructuras*/
 //Tipos de escenario
@@ -62,6 +63,14 @@ typedef struct huesped{
 	struct huesped* siguiente;
 }huesped;
 
+//Tramas
+
+typedef struct trama{
+	huesped* huespedes;
+	nodo_anfitrion* anfitriones;
+	escenario* escenario;
+}trama;
+
 /*Funciones*/
 //Funciones para inicializar las estructuras
 
@@ -103,6 +112,14 @@ void conocerEscenarioHuesped(huesped*, escenario*);
 
 anfitrion anfitrionMasFeliz(nodo_anfitrion*);
 huesped* huespedMasFeliz(huesped*);
+float complejidad(trama);
+bool huespedEsRebelde(huesped*);
+bool anfitrionEsRebelde(anfitrion*);
+bool todosAnfitrionesRebeldes(nodo_anfitrion* Anfitriones);
+bool todosHuespedesRebeldes(huesped*);
+bool esPicante(trama);
+void matarAnfitrionesRebeldes(nodo_anfitrion*);
+void renovar(trama);
 
 //Funciones de utilidad
 

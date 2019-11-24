@@ -259,3 +259,90 @@ huesped* huespedMasFeliz(huesped* Huespedes){
 	}
 	return elMasFeliz;
 }
+
+float complejidad(trama Trama){
+	int nivelFama = nivelDeFama(Trama.escenario);
+	float felicidadHuesped = felicidadDeHuesped(huespedMasFeliz(Trama.huespedes));
+	float felicidadAnfitrion = ini_felicidadAnfitrion(anfitrionMasFeliz(Trama.anfitriones));
+	if(felicidadHuesped>felicidadAnfitrion){
+		return nivelFama/felicidadHuesped;
+	}
+	else{
+		return nivelFama/felicidadAnfitrion;
+	}
+}
+
+bool huespedEsRebelde(huesped* Huesped){
+	return rebeldiaHuesped(Huesped)>10;
+}
+
+bool anfitrionEsRebelde(anfitrion* Anfitrion){
+	return rebeldiaDeAnfitrion(Anfitrion)>10;
+}
+
+bool todosAnfitrionesRebeldes(nodo_anfitrion* Anfitriones){
+	bool booleano;
+	while(Anfitriones->siguiente != NULL){
+		if(anfitrionEsRebelde(inicializarAnfitrion(Anfitriones->anfitrion.nombre,Anfitriones->anfitrion.energia,Anfitriones->anfitrion.procesamiento,Anfitriones->anfitrion.recuerdos))==1){
+			booleano = true;
+		}
+		else{
+			booleano = false;
+			return booleano;
+		}
+		Anfitriones = Anfitriones->siguiente;
+	}
+	return booleano;
+}
+
+bool todosHuespedesRebeldes(huesped* Huespedes){
+	bool booleano;
+	while(Huespedes->siguiente !=false){
+		if(huespedEsRebelde(Huespedes)){
+			booleano = true;
+		}
+		else{
+			booleano = false;
+			return booleano;
+		}
+		Huespedes = Huespedes->siguiente;
+	}
+	return booleano;
+}
+
+bool esPicante(trama Trama){
+	bool booleano;
+	if(todosHuespedesRebeldes(Trama.huespedes)&&todosAnfitrionesRebeldes(Trama.anfitriones)){
+		booleano = true;
+		return booleano;
+	}
+	else{
+		booleano = false;
+		return booleano;
+	}
+}
+
+void matarAnfitrionesRebeldes(nodo_anfitrion* Anfitriones){
+	while(Anfitriones != NULL){
+		anfitrion* anfitrion_actual = inicializarAnfitrion(Anfitriones->anfitrion.nombre,Anfitriones->anfitrion.energia,Anfitriones->anfitrion.procesamiento,Anfitriones->anfitrion.recuerdos);
+		if(anfitrionEsRebelde(anfitrion_actual)){
+		Anfitriones->anfitrion.energia = 0;
+		}
+		Anfitriones = Anfitriones->siguiente;
+	}
+}
+
+void matarHuespedesRebeldes(huesped* Huespedes){
+	while(Huespedes != NULL){
+		if(huespedEsRebelde(Huespedes)){
+			Huespedes->energia = 0;
+		}
+		Huespedes = Huespedes->siguiente;
+	}
+}
+
+void renovar(trama Trama){
+	evolucionarEscenario(Trama.escenario);
+	matarHuespedesRebeldes(Trama.huespedes);
+	matarAnfitrionesRebeldes(Trama.anfitriones);
+}
