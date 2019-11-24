@@ -94,11 +94,17 @@ float mapearFelicidadAnfitriones(nodo_anfitrion*);
 
 int nivelDeFama(escenario*);
 int emotividad(recuerdo*);
-int felicidadHuesped(huesped*);
+int felicidadDeHuesped(huesped*);
+double rebeldiaHuesped(huesped*);
 
 escenario* evolucionarEscenario(escenario*);
-void conocer(anfitrion*, escenario*);
+void conocerEscenarioAnfitrion(anfitrion*, escenario*);
+void conocerEscenarioHuesped(huesped*, escenario*);
+
+anfitrion anfitrionMasFeliz(nodo_anfitrion*);
+huesped* huespedMasFeliz(huesped*);
 
 //Funciones de utilidad
 
 char* strconcat(char*, char*);
+float ini_felicidadAnfitrion(anfitrion);

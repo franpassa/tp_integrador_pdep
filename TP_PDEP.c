@@ -13,7 +13,7 @@ int main() {
 	anfitrion* Dolores = inicializarAnfitrion("Dolores",90,0.7,RecuerdosDeDolores);
 	anfitrion* Pepe = inicializarAnfitrion("Pepe",70,0.9,RecuerdosDeDolores);
 
-	conocer(Dolores,cantina);
+	conocerEscenarioAnfitrion(Dolores,cantina);
 	nodo_anfitrion* Anfitriones = NULL;
 	Anfitriones = agregarAnfitrionALista(Dolores,Anfitriones);
 	Anfitriones = agregarAnfitrionALista(Pepe,Anfitriones);
@@ -43,7 +43,23 @@ int main() {
 	printf("La suma de las felicidades de los anfitriones es: %.2f\n",mapeo);
 	mostrarHuesped(Pedro);
 
-	float felicidad = felicidadHuesped(Pedro);
-	printf("La felicidad de Pedro es: %.2f\n", felicidad);
+	int felicidad = felicidadDeHuesped(William);
+	printf("La felicidad de William es: %d\n", felicidad);
+
+	double rebeldia = rebeldiaHuesped(William);
+	printf("La rebeldia de William es: %.10lf\n", rebeldia);
+
+	mostrarHuesped(William);
+	mostrarEscenario(cantina);
+	conocerEscenarioHuesped(William,cantina);
+	mostrarHuesped(William);
+	mostrarEscenario(cantina);
+
+	anfitrion masFeliz = anfitrionMasFeliz(Anfitriones);
+	printf("El anfitrion mas feliz es: %s\n", masFeliz.nombre);
+
+	huesped* masFelizHuesped = huespedMasFeliz(Pedro);
+	printf("El huesped mas feliz es: %s\n", masFelizHuesped->nombre);
+
 	return 0;
 }

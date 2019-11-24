@@ -117,12 +117,14 @@ void mostrarEscenario(escenario* Escenario){
 	printf("El nombre del escenario es: %s\n",Escenario->nombre);
 	if(strcmp(((bajoCoste*)Escenario->categoria)->nombre,"bajoCoste")==0){
 		printf("La categoria del escenario es: %s\n",((bajoCoste*)Escenario->categoria)->nombre);
+		printf("La zona del escenario es: %s\n",((bajoCoste*)Escenario->categoria)->zona);
 	}
-	else if(strcmp(((estandar*)Escenario->categoria)->nombre,"bajoCoste")==0){
+	else if(strcmp(((estandar*)Escenario->categoria)->nombre,"estandar")==0){
 		printf("La categoria del escenario es: %s\n",((estandar*)Escenario->categoria)->nombre);
 	}
 	else{
 		printf("La categoria del escenario es: %s\n",((deLujo*)Escenario->categoria)->nombre);
+		printf("La cantidad de visitas del escenario es: %d\n",((deLujo*)Escenario->categoria)->visitas);
 	}
 }
 
@@ -188,7 +190,7 @@ char* strconcat(char *s,char *t)
     return p;
 }
 
-void conocer(anfitrion* Anfitrion,escenario* Escenario){
+void conocerEscenarioAnfitrion(anfitrion* Anfitrion,escenario* Escenario){
 	recuerdo* nuevoRecuerdo = malloc(sizeof(recuerdo));
 	nuevoRecuerdo->descripcion = strconcat("Conoce el escenario ",Escenario->nombre);
 	nuevoRecuerdo->Escenario = Escenario;
@@ -206,13 +208,54 @@ float mapearFelicidadAnfitriones(nodo_anfitrion* Anfitriones){
 	return acumulador;
 }
 
-int felicidadHuesped(huesped* Huesped){
+int felicidadDeHuesped(huesped* Huesped){
 	float felicidadAmigosAnfitriones = mapearFelicidadAnfitriones(Huesped->anfitriones);
 	float minutosRestantes = Huesped->minutosRestantes;
 	float acumulador = felicidadAmigosAnfitriones;
 	if(Huesped->siguiente != NULL){
-		acumulador += felicidadHuesped(Huesped->siguiente);
+		acumulador += felicidadDeHuesped(Huesped->siguiente);
 	}
-
 	return acumulador*minutosRestantes;
+}
+
+double rebeldiaHuesped(huesped* Huesped){
+	double felicidad = felicidadDeHuesped(Huesped);
+	return 1/felicidad;
+}
+
+void conocerEscenarioHuesped(huesped* Huesped, escenario* Escenario){
+	Huesped->minutosRestantes -= 10;
+	if(strcmp(((deLujo*)Escenario->categoria)->nombre,"deLujo")==0){
+		((deLujo*)Escenario->categoria)->visitas += 1;
+	}
+}
+
+float ini_felicidadAnfitrion(anfitrion Anfitrion){
+	anfitrion* nuevoAnfitrion = malloc(sizeof(nuevoAnfitrion));
+	nuevoAnfitrion = inicializarAnfitrion(Anfitrion.nombre,Anfitrion.energia,Anfitrion.procesamiento,Anfitrion.recuerdos);
+	float felicidad = felicidadDeAnfitrion(nuevoAnfitrion);
+	return felicidad;
+}
+
+anfitrion anfitrionMasFeliz(nodo_anfitrion* Anfitriones){
+	anfitrion elMasFeliz = Anfitriones->anfitrion;
+	while(Anfitriones->siguiente != NULL){
+		if(ini_felicidadAnfitrion(elMasFeliz)<ini_felicidadAnfitrion(Anfitriones->siguiente->anfitrion)){
+			elMasFeliz = Anfitriones->siguiente->anfitrion;
+		}
+		Anfitriones = Anfitriones->siguiente;
+	}
+	return elMasFeliz;
+}
+
+huesped* huespedMasFeliz(huesped* Huespedes){
+	huesped* elMasFeliz = malloc(sizeof(huesped));
+	elMasFeliz = Huespedes;
+	while(Huespedes->siguiente != NULL){
+		if(felicidadDeHuesped(Huespedes)<felicidadDeHuesped(Huespedes->siguiente)){
+			elMasFeliz = Huespedes->siguiente;
+		}
+		Huespedes = Huespedes->siguiente;
+	}
+	return elMasFeliz;
 }
