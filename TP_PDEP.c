@@ -2,8 +2,8 @@
 
 int main() {
 	deLujo* deLujo = inicializarTipoDeLujo(10);
-	estandar* estandar = inicializarTipoEstandar();
-	bajoCoste* BajoCoste = inicializarTipoBajoCoste("vicente lopez");
+	//estandar* estandar = inicializarTipoEstandar();
+	//bajoCoste* BajoCoste = inicializarTipoBajoCoste("vicente lopez");
     escenario* cantina = inicializarEscenario("Cantina",deLujo);
     recuerdo* RecuerdoAmor = inicializarRecuerdo("Conocio al amor de su vida en la cantina",cantina);
 
@@ -11,10 +11,12 @@ int main() {
     RecuerdosDeDolores = agregarRecuerdoALista(RecuerdoAmor,RecuerdosDeDolores);
 
 	anfitrion* Dolores = inicializarAnfitrion("Dolores",90,0.7,RecuerdosDeDolores);
+	anfitrion* Pepe = inicializarAnfitrion("Pepe",70,0.9,RecuerdosDeDolores);
 
 	conocer(Dolores,cantina);
 	nodo_anfitrion* Anfitriones = NULL;
 	Anfitriones = agregarAnfitrionALista(Dolores,Anfitriones);
+	Anfitriones = agregarAnfitrionALista(Pepe,Anfitriones);
 	mostrarAnfitriones(Anfitriones);
 
 	printf("El nivel de felicidad de Dolores es: %.2f\n",felicidadDeAnfitrion(Dolores));
@@ -27,5 +29,21 @@ int main() {
 	evolucionarEscenario(cantina);
 	mostrarEscenario(cantina);
 
+	huesped* William = inicializarHuesped("William",10,30,Anfitriones,NULL);
+	huesped* Pedro = inicializarHuesped("Pedro",20,40,Anfitriones,NULL);
+	huesped* Juan = inicializarHuesped("Juan",50,5,Anfitriones,NULL);
+
+	Juan = agregarHuespedALista(Juan,William);
+	Pedro = agregarHuespedALista(Pedro,Juan);
+
+	mostrarHuesped(Pedro);
+	mostrarHuesped(Pedro);
+
+	float mapeo = mapearFelicidadAnfitriones(Pedro->anfitriones);
+	printf("La suma de las felicidades de los anfitriones es: %.2f\n",mapeo);
+	mostrarHuesped(Pedro);
+
+	float felicidad = felicidadHuesped(Pedro);
+	printf("La felicidad de Pedro es: %.2f\n", felicidad);
 	return 0;
 }

@@ -52,6 +52,16 @@ typedef struct nodo_anfitrion{
 	struct nodo_anfitrion* siguiente;
 }nodo_anfitrion;
 
+//Huespedes
+
+typedef struct huesped{
+	char* nombre;
+	int energia;
+	int minutosRestantes;
+	nodo_anfitrion* anfitriones;
+	struct huesped* siguiente;
+}huesped;
+
 /*Funciones*/
 //Funciones para inicializar las estructuras
 
@@ -59,17 +69,20 @@ bajoCoste* inicializarTipoBajoCoste(char*);
 estandar* inicializarTipoEstandar();
 deLujo* inicializarTipoDeLujo(int);
 anfitrion* inicializarAnfitrion(char*, int, float, nodo_recuerdo*);
+huesped* inicializarHuesped(char*, int, int, nodo_anfitrion*, huesped*);
 recuerdo* inicializarRecuerdo(char*, escenario*);
 escenario* inicializarEscenario(char*, void*);
 
 //Funciones para agregar elementos a las listas
 
 nodo_anfitrion* agregarAnfitrionALista(anfitrion*, nodo_anfitrion*);
+huesped* agregarHuespedALista(huesped*, huesped*);
 nodo_recuerdo* agregarRecuerdoALista(recuerdo*, nodo_recuerdo*);
 
 //Funciones para mostrar
 
 void mostrarAnfitriones(nodo_anfitrion*);
+void mostrarHuesped(huesped*);
 void mostrarEscenario(escenario*);
 void mostrarRecuerdos(nodo_recuerdo*);
 
@@ -77,9 +90,11 @@ void mostrarRecuerdos(nodo_recuerdo*);
 
 float felicidadDeAnfitrion(anfitrion*);
 float rebeldiaDeAnfitrion(anfitrion*);
+float mapearFelicidadAnfitriones(nodo_anfitrion*);
 
 int nivelDeFama(escenario*);
 int emotividad(recuerdo*);
+int felicidadHuesped(huesped*);
 
 escenario* evolucionarEscenario(escenario*);
 void conocer(anfitrion*, escenario*);
