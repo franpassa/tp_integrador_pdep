@@ -32,9 +32,10 @@ int main() {
 	huesped* William = inicializarHuesped("William",10,30,Anfitriones,NULL);
 	huesped* Pedro = inicializarHuesped("Pedro",20,40,Anfitriones,NULL);
 	huesped* Juan = inicializarHuesped("Juan",50,5,Anfitriones,NULL);
+	nodo_huesped* Huespedes = NULL;
 
-	Juan = agregarHuespedALista(Juan,William);
-	Pedro = agregarHuespedALista(Pedro,Juan);
+	Huespedes = agregarHuespedALista(Juan,Huespedes);
+	Huespedes = agregarHuespedALista(Pedro,Huespedes);
 
 	mostrarHuesped(Pedro);
 	mostrarHuesped(Pedro);
@@ -58,12 +59,12 @@ int main() {
 	anfitrion masFeliz = anfitrionMasFeliz(Anfitriones);
 	printf("El anfitrion mas feliz es: %s\n", masFeliz.nombre);
 
-	huesped* masFelizHuesped = huespedMasFeliz(Pedro);
-	printf("El huesped mas feliz es: %s\n", masFelizHuesped->nombre);
+	huesped masFelizHuesped = huespedMasFeliz(Huespedes);
+	printf("El huesped mas feliz es: %s\n", masFelizHuesped.nombre);
 
 	trama Trama;
 	Trama.anfitriones = Anfitriones;
-	Trama.huespedes = Pedro;
+	Trama.huespedes = Huespedes;
 	Trama.escenario = cantina;
 
 	printf("La complejidad de la trama es: %f\n", complejidad(Trama));
@@ -74,7 +75,7 @@ int main() {
 	bool anfitrion = anfitrionEsRebelde(Dolores);
 	printf("Es Dolores una anfitriona rebelde? %s\n", anfitrion? "SI":"NO");
 
-	bool huespedes = todosHuespedesRebeldes(Pedro);
+	bool huespedes = todosHuespedesRebeldes(Huespedes);
 	printf("Son todos rebeldes? %s\n", huespedes? "SI":"NO");
 
 	bool trama = esPicante(Trama);

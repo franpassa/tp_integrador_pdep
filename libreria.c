@@ -9,13 +9,13 @@ anfitrion* inicializarAnfitrion(char* nombre,int energia,float procesamiento,nod
 	return nuevoAnfitrion;
 }
 
-huesped* inicializarHuesped(char* nombre,int energia,int minutosRestantes,nodo_anfitrion* Anfitriones, huesped* Huespedes){
+huesped* inicializarHuesped(char* nombre,int energia,int minutosRestantes,nodo_anfitrion* Anfitriones, nodo_huesped* Huespedes){
 	huesped* nuevoHuesped = malloc(sizeof(huesped));
 	nuevoHuesped->nombre = strdup(nombre);
 	nuevoHuesped->energia = energia;
 	nuevoHuesped->minutosRestantes = minutosRestantes;
 	nuevoHuesped->anfitriones = Anfitriones;
-	nuevoHuesped->siguiente = Huespedes;
+	nuevoHuesped->huespedes = Huespedes;
 	return nuevoHuesped;
 }
 
@@ -67,13 +67,11 @@ nodo_anfitrion* agregarAnfitrionALista(anfitrion* Anfitrion, nodo_anfitrion* Lis
     return nuevoNodo;
 }
 
-huesped* agregarHuespedALista(huesped* Huesped, huesped* otroHuesped){
-	huesped* nuevoHuesped = Huesped;
-	while(nuevoHuesped->siguiente != NULL){
-		nuevoHuesped = nuevoHuesped->siguiente;
-	}
-	nuevoHuesped->siguiente = otroHuesped;
-	return Huesped;
+nodo_huesped* agregarHuespedALista(huesped* Huesped, nodo_huesped* Lista){
+    nodo_huesped* nuevoNodo = (nodo_huesped*)malloc(sizeof(nodo_huesped));
+    nuevoNodo->huesped = *Huesped;
+    nuevoNodo->siguiente = Lista;
+    return nuevoNodo;
 }
 
 void mostrarRecuerdos(nodo_recuerdo* Lista){
@@ -104,10 +102,10 @@ void mostrarHuesped(huesped* Huesped){
 			aux = aux->siguiente;
 		}
 		free(aux);
-		huesped* aux2 = Huesped;
+		nodo_huesped* aux2 = Huesped->huespedes;
 		printf("\nHuespedes amigos: ");
 		while(aux2 != NULL){
-			printf("%s ",aux2->nombre);
+			printf("%s ",aux2->huesped.nombre);
 			aux2 = aux2->siguiente;
 		}
 		printf("\n");
@@ -208,13 +206,22 @@ float mapearFelicidadAnfitriones(nodo_anfitrion* Anfitriones){
 	return acumulador;
 }
 
+float mapearFelicidadHuespedes(nodo_huesped* Huespedes){
+	float acumulador = 0;
+	huesped* actual = malloc(sizeof(anfitrion));
+	while (Huespedes != NULL){
+		actual = inicializarHuesped(Huespedes->huesped.nombre,Huespedes->huesped.energia,Huespedes->huesped.minutosRestantes,Huespedes->huesped.anfitriones,Huespedes->huesped.huespedes);
+		acumulador += felicidadDeHuesped(actual);
+		Huespedes = Huespedes->siguiente;
+	}
+	return acumulador;
+}
+
 int felicidadDeHuesped(huesped* Huesped){
 	float felicidadAmigosAnfitriones = mapearFelicidadAnfitriones(Huesped->anfitriones);
+	float felicidadAmigosHuespedes = mapearFelicidadHuespedes(Huesped->huespedes);
 	float minutosRestantes = Huesped->minutosRestantes;
-	float acumulador = felicidadAmigosAnfitriones;
-	if(Huesped->siguiente != NULL){
-		acumulador += felicidadDeHuesped(Huesped->siguiente);
-	}
+	float acumulador = felicidadAmigosAnfitriones + felicidadAmigosHuespedes;
 	return acumulador*minutosRestantes;
 }
 
@@ -231,9 +238,16 @@ void conocerEscenarioHuesped(huesped* Huesped, escenario* Escenario){
 }
 
 float ini_felicidadAnfitrion(anfitrion Anfitrion){
-	anfitrion* nuevoAnfitrion = malloc(sizeof(nuevoAnfitrion));
+	anfitrion* nuevoAnfitrion = malloc(sizeof(anfitrion));
 	nuevoAnfitrion = inicializarAnfitrion(Anfitrion.nombre,Anfitrion.energia,Anfitrion.procesamiento,Anfitrion.recuerdos);
 	float felicidad = felicidadDeAnfitrion(nuevoAnfitrion);
+	return felicidad;
+}
+
+float ini_felicidadHuesped(huesped Huesped){
+	huesped* nuevoHuesped = malloc(sizeof(huesped));
+	nuevoHuesped = inicializarHuesped(Huesped.nombre,Huesped.energia,Huesped.minutosRestantes,Huesped.anfitriones,Huesped.huespedes);
+	float felicidad = felicidadDeAnfitrion(nuevoHuesped);
 	return felicidad;
 }
 
@@ -248,12 +262,11 @@ anfitrion anfitrionMasFeliz(nodo_anfitrion* Anfitriones){
 	return elMasFeliz;
 }
 
-huesped* huespedMasFeliz(huesped* Huespedes){
-	huesped* elMasFeliz = malloc(sizeof(huesped));
-	elMasFeliz = Huespedes;
+huesped huespedMasFeliz(nodo_huesped* Huespedes){
+	huesped elMasFeliz = Huespedes->huesped;
 	while(Huespedes->siguiente != NULL){
-		if(felicidadDeHuesped(Huespedes)<felicidadDeHuesped(Huespedes->siguiente)){
-			elMasFeliz = Huespedes->siguiente;
+		if(ini_felicidadHuesped(elMasFeliz)<ini_felicidadHuesped(Huespedes->siguiente->huesped)){
+			elMasFeliz = Huespedes->siguiente->huesped;
 		}
 		Huespedes = Huespedes->siguiente;
 	}
@@ -262,7 +275,7 @@ huesped* huespedMasFeliz(huesped* Huespedes){
 
 float complejidad(trama Trama){
 	int nivelFama = nivelDeFama(Trama.escenario);
-	float felicidadHuesped = felicidadDeHuesped(huespedMasFeliz(Trama.huespedes));
+	float felicidadHuesped = ini_felicidadHuesped(huespedMasFeliz(Trama.huespedes));
 	float felicidadAnfitrion = ini_felicidadAnfitrion(anfitrionMasFeliz(Trama.anfitriones));
 	if(felicidadHuesped>felicidadAnfitrion){
 		return nivelFama/felicidadHuesped;
@@ -295,10 +308,10 @@ bool todosAnfitrionesRebeldes(nodo_anfitrion* Anfitriones){
 	return booleano;
 }
 
-bool todosHuespedesRebeldes(huesped* Huespedes){
+bool todosHuespedesRebeldes(nodo_huesped* Huespedes){
 	bool booleano;
-	while(Huespedes->siguiente !=false){
-		if(huespedEsRebelde(Huespedes)){
+	while(Huespedes->siguiente != NULL){
+		if(huespedEsRebelde(inicializarHuesped(Huespedes->huesped.nombre,Huespedes->huesped.energia,Huespedes->huesped.minutosRestantes,Huespedes->huesped.anfitriones,Huespedes->huesped.huespedes))){
 			booleano = true;
 		}
 		else{
@@ -332,10 +345,11 @@ void matarAnfitrionesRebeldes(nodo_anfitrion* Anfitriones){
 	}
 }
 
-void matarHuespedesRebeldes(huesped* Huespedes){
+void matarHuespedesRebeldes(nodo_huesped* Huespedes){
 	while(Huespedes != NULL){
-		if(huespedEsRebelde(Huespedes)){
-			Huespedes->energia = 0;
+		huesped* huesped_actual = inicializarHuesped(Huespedes->huesped.nombre,Huespedes->huesped.energia,Huespedes->huesped.minutosRestantes,Huespedes->huesped.anfitriones,Huespedes->huesped.huespedes);
+		if(huespedEsRebelde(huesped_actual)){
+			Huespedes->huesped.energia = 0;
 		}
 		Huespedes = Huespedes->siguiente;
 	}

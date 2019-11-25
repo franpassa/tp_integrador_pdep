@@ -55,18 +55,26 @@ typedef struct nodo_anfitrion{
 
 //Huespedes
 
-typedef struct huesped{
+typedef struct huesped huesped;
+typedef struct nodo_huesped nodo_huesped;
+
+struct huesped{
 	char* nombre;
 	int energia;
 	int minutosRestantes;
 	nodo_anfitrion* anfitriones;
-	struct huesped* siguiente;
-}huesped;
+	nodo_huesped* huespedes;
+};
+
+struct nodo_huesped{
+	huesped huesped;
+	nodo_huesped* siguiente;
+};
 
 //Tramas
 
 typedef struct trama{
-	huesped* huespedes;
+	nodo_huesped* huespedes;
 	nodo_anfitrion* anfitriones;
 	escenario* escenario;
 }trama;
@@ -78,14 +86,14 @@ bajoCoste* inicializarTipoBajoCoste(char*);
 estandar* inicializarTipoEstandar();
 deLujo* inicializarTipoDeLujo(int);
 anfitrion* inicializarAnfitrion(char*, int, float, nodo_recuerdo*);
-huesped* inicializarHuesped(char*, int, int, nodo_anfitrion*, huesped*);
+huesped* inicializarHuesped(char*, int, int, nodo_anfitrion*, nodo_huesped*);
 recuerdo* inicializarRecuerdo(char*, escenario*);
 escenario* inicializarEscenario(char*, void*);
 
 //Funciones para agregar elementos a las listas
 
 nodo_anfitrion* agregarAnfitrionALista(anfitrion*, nodo_anfitrion*);
-huesped* agregarHuespedALista(huesped*, huesped*);
+nodo_huesped* agregarHuespedALista(huesped*, nodo_huesped*);
 nodo_recuerdo* agregarRecuerdoALista(recuerdo*, nodo_recuerdo*);
 
 //Funciones para mostrar
@@ -100,6 +108,7 @@ void mostrarRecuerdos(nodo_recuerdo*);
 float felicidadDeAnfitrion(anfitrion*);
 float rebeldiaDeAnfitrion(anfitrion*);
 float mapearFelicidadAnfitriones(nodo_anfitrion*);
+float mapearFelicidadHuespedes(nodo_huesped*);
 
 int nivelDeFama(escenario*);
 int emotividad(recuerdo*);
@@ -111,12 +120,12 @@ void conocerEscenarioAnfitrion(anfitrion*, escenario*);
 void conocerEscenarioHuesped(huesped*, escenario*);
 
 anfitrion anfitrionMasFeliz(nodo_anfitrion*);
-huesped* huespedMasFeliz(huesped*);
+huesped huespedMasFeliz(nodo_huesped*);
 float complejidad(trama);
 bool huespedEsRebelde(huesped*);
 bool anfitrionEsRebelde(anfitrion*);
 bool todosAnfitrionesRebeldes(nodo_anfitrion* Anfitriones);
-bool todosHuespedesRebeldes(huesped*);
+bool todosHuespedesRebeldes(nodo_huesped*);
 bool esPicante(trama);
 void matarAnfitrionesRebeldes(nodo_anfitrion*);
 void renovar(trama);
@@ -125,3 +134,4 @@ void renovar(trama);
 
 char* strconcat(char*, char*);
 float ini_felicidadAnfitrion(anfitrion);
+float ini_felicidadHuesped(huesped);
