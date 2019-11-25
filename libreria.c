@@ -87,8 +87,16 @@ void mostrarAnfitriones(nodo_anfitrion* Lista){
 		printf("Energia: %d\n",Lista->anfitrion.energia);
 		printf("Procesamiento: %.2f\n",Lista->anfitrion.procesamiento);
 		mostrarRecuerdos(Lista->anfitrion.recuerdos);
+		printf("\n");
 		Lista = Lista->siguiente;
 	}
+}
+
+void mostrarAnfitrion(anfitrion* Anfitrion){
+	printf("Nombre: %s\n", Anfitrion->nombre);
+	printf("Energia: %d\n", Anfitrion->energia);
+	printf("Procesamiento: %f\n", Anfitrion->procesamiento);
+	mostrarRecuerdos(Anfitrion->recuerdos);
 }
 
 void mostrarHuesped(huesped* Huesped){
@@ -247,7 +255,7 @@ float ini_felicidadAnfitrion(anfitrion Anfitrion){
 float ini_felicidadHuesped(huesped Huesped){
 	huesped* nuevoHuesped = malloc(sizeof(huesped));
 	nuevoHuesped = inicializarHuesped(Huesped.nombre,Huesped.energia,Huesped.minutosRestantes,Huesped.anfitriones,Huesped.huespedes);
-	float felicidad = felicidadDeAnfitrion(nuevoHuesped);
+	float felicidad = felicidadDeHuesped(nuevoHuesped);
 	return felicidad;
 }
 

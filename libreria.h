@@ -99,6 +99,7 @@ nodo_recuerdo* agregarRecuerdoALista(recuerdo*, nodo_recuerdo*);
 //Funciones para mostrar
 
 void mostrarAnfitriones(nodo_anfitrion*);
+void mostrarAnfitrion(anfitrion*);
 void mostrarHuesped(huesped*);
 void mostrarEscenario(escenario*);
 void mostrarRecuerdos(nodo_recuerdo*);
